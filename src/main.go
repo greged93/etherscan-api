@@ -1,26 +1,21 @@
 package main
 
-import(
-	"fmt"
+import (
 	"net/http"
 )
 
-type HttpRequestError struct {
-	url string
+type HttpRequest struct {
+	url          string
+	rawResponse  *http.Response
+	jsonResponse map[string]interface{}
+	err          error
 }
 
-func (e HttpRequestError) Error() string {
-	return fmt.Sprintf("Error at url %s", e.url)
+func (h *HttpRequest) makeRequest(url string) {
+	h.rawResponse, h.err = http.Get(url)
 }
-
 
 func main() {
-	fmt.Printf("Hello World!")
-	resp, err := http.Get("https://jsonplaceholder.typicode.com/posts/1")
-	if err != nil {
-		fmt.Printf("Error !")
-		fmt.Println(err)
-	} else {
-		fmt.Println(resp)
-	}
+	var req HttpRequest
+	req.makeRequest("https://jsonplaceholder.typicode.com/posts/1")
 }
